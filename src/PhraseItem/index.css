@@ -1,0 +1,49 @@
+.song-display-phrase-item{
+    display: inline-block;
+    vertical-align: middle;
+    min-height: 250px;
+    max-height: 250px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 1px;
+    transition: 0.5s;
+    box-shadow:   -5px -5px 9px #5a5a5a,
+    5px 5px 9px #ffffff;
+    
+}
+.no-vocal{
+    min-height: 100px !important;
+    max-height: 100px !important;
+    box-shadow:  -5px -5px 9px #5a5a5a,
+    5px 5px 9px #ffffff;
+}
+.has-vocal{
+    min-height: 200px !important;
+    max-height: 200px !important;
+    box-shadow:   -5px -5px 9px #5a5a5a,
+    5px 5px 9px #ffffff;
+}
+.song-display-phrase-item-intro{
+    background-color: #e4d6c9
+}
+.song-display-phrase-item-verse{
+    background-color: #E5BE9C;
+}
+.song-display-phrase-item-chorus{
+    background-color: #b0bacc;
+}
+.song-display-phrase-item-outro{
+    background-color: #ccd6db;
+}
+.song-display-phrase-item-other{
+    background-color: #b4b3b3;
+}
+.phrase-item-title{
+    color: rgba(0, 0, 0, 0.582);
+    text-align: center;
+    margin-top: 10px;
+    transition: 1s;
+}
+.trans{
+    color: rgba(0, 0, 0, 0) !important;
+}

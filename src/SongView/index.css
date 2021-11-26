@@ -1,0 +1,30 @@
+.song-display-divider{
+    width: 100%;
+    min-height: 1px;
+    background-color: gray;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.song-info{
+    min-height: 45px;
+}
+.song-title{
+    color: rgb(75, 74, 74);
+    font-family: zillaslab,palatino,"Palatino Linotype",serif;
+    font-size: 40px;
+    line-height: 40px;
+    float: left;
+}
+.song-structure{
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling:touch;
+    margin-top: 30px;
+}
+.song-display-connector{
+    min-width: 30px;
+    min-height: 250px;
+    max-width: 30px;
+    max-height: 250px;
+    display: inline-block;
+}
