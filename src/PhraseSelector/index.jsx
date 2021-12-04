@@ -46,35 +46,35 @@ export default class PhraseSelector extends React.Component {
     render(){
         return (
             <div className='phrase-selector-root'>
-                <div style={{cursor:'pointer'}} onClick={this.handelClick}>
+                <div style={{cursor:'pointer'}} onClick={this.handelClick} data-aos='flip-down' data-aos-delay={900} data-aos-once={true}>
                     {this.state.intro ? 
                         <div className='phrase-selection phrase-selection-left-radius intro' id='phrase-select-intro'>Intro</div>
                         :
                         <div className='phrase-selection phrase-selection-left-radius not-selected' id='phrase-select-intro'>Intro</div>
                     }
                 </div>
-                <div style={{cursor:'pointer'}} onClick={this.handelClick}>
+                <div style={{cursor:'pointer'}} onClick={this.handelClick} data-aos='flip-down' data-aos-delay={1000} data-aos-once={true}>
                     {this.state.verse ? 
                         <div className='phrase-selection verse' id='phrase-select-verse'>Verse</div>
                         :
                         <div className='phrase-selection not-selected' id='phrase-select-verse'>Verse</div>
                     }
                 </div>
-                <div style={{cursor:'pointer'}}   onClick={this.handelClick}>
+                <div style={{cursor:'pointer'}}   onClick={this.handelClick} data-aos='flip-down' data-aos-delay={1100} data-aos-once={true}>
                     {this.state.chorus ? 
                         <div className='phrase-selection chorus' id='phrase-select-chorus'>Chorus</div>
                         :
                         <div className='phrase-selection not-selected' id='phrase-select-chorus'>Chorus</div>
                     }
                 </div>
-                <div style={{cursor:'pointer'}} onClick={this.handelClick}>
+                <div style={{cursor:'pointer'}} onClick={this.handelClick} data-aos='flip-down' data-aos-delay={1200} data-aos-once={true}>
                     {this.state.outro ? 
                         <div className='phrase-selection outro' id='phrase-select-outro' >Outro</div>
                         :
                         <div className='phrase-selection not-selected' id='phrase-select-outro' >Outro</div>
                     }
                 </div>
-                <div style={{cursor:'pointer'}} onClick={this.handelClick}>
+                <div style={{cursor:'pointer'}} onClick={this.handelClick} data-aos='flip-down' data-aos-delay={1300} data-aos-once={true}>
                     {this.state.other ? 
                         <div className='phrase-selection phrase-selection-right-radius other' id='phrase-select-other'>Other</div>
                         :

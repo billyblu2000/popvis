@@ -6,6 +6,8 @@ const tonicMap = { 0:'C',1:'D♭',2:'D',3:'E♭',4:'E',5:'F',6:'F♯',7:'G',8:'A
 const modeMap = { maj:' Major', min:' Minor' }
 export default class PhraseItem extends Component {
 
+    state = {playing:'stop'}
+
     changeDisplay = () => {
         if (this.props.displayed === false){
             this.props.changeDisplay(this.props.id)
@@ -27,6 +29,32 @@ export default class PhraseItem extends Component {
         }
         console.log(progressionStr)
         return progressionStr.substring(2)
+    }
+    play = (e) =>{
+        if (this.state.playing === 'stop'){
+            this.mp3 = new Audio(`/api/popvis_back_end/chordprogression/${this.props.songId}/${this.props.id}`);
+            this.mp3.play();
+            this.mp3.addEventListener('ended', (event) => {
+                this.setState({
+                        playing:'stop'
+                    })
+                });
+            this.setState({
+                playing:'playing'
+            })
+        }
+        else if (this.state.playing === 'pause'){
+            this.mp3.play();
+            this.setState({
+                playing:'playing'
+            })
+        }
+        else if (this.state.playing === 'playing'){
+            this.setState({
+                playing:'pause'
+            })
+            this.mp3.pause();
+        }
     }
 
     render() {
@@ -60,10 +88,10 @@ export default class PhraseItem extends Component {
                                     valueStyle={{color:'rgba(0,0,0,0.7)', fontFamily:'zillaslab,palatino,"Palatino Linotype",serif'}} 
                                     style={{display:'inline-block',width:'45%', marginRight:'5%'}} />
                             </p>
-                            <div style={{textAlign:'center',fontSize:'20px', color:'rgba(0,0,0,0.7)', paddingLeft:'8%', paddingRight:'8%'}}>
-                            <Tooltip placement='bottom' title={'Chord Porgression: ' + this.getProgression()}
+                            <div style={{textAlign:'center',fontSize:'20px', color:'rgba(0,0,0,0.7)',transition:'0.5s', paddingLeft:'8%', paddingRight:'8%'}}>
+                            <Tooltip placement='bottom' title={'Click to play chord progression: ' + this.getProgression()}
                             overlayStyle={{maxWidth:'500px'}}>
-                                <Text ellipsis={true}>{this.getProgression()}</Text>
+                                <Text ellipsis={true} onClick={this.play} style={{color:this.state.playing==='playing'? 'green':'black'}}>{this.getProgression()}</Text>
                             </Tooltip>
                             </div>
                         </div>

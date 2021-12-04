@@ -42,7 +42,7 @@ export default class SongSelector extends Component {
         this.props.highlightChange(event.target.id.split('-')[1])
     }
     handelMouseLeave = () => {
-        this.props.highlightChange(null)
+        this.props.highlightChange('-1')
     }
 
     search = (event) => {
@@ -57,7 +57,26 @@ export default class SongSelector extends Component {
                 <div className='song-selector-search' ><Input ref={this.searchInput} placeholder="Type name or artist" prefix={<SearchOutlined style={{color:'rgba(135, 165, 189, 0.678)'}}/>} bordered={false} allowClear={true} style={{width:'100%'}} onChange={this.search}/></div>
                 <div style={{overflow: 'scroll', maxHeight: '800px'}}>
                     {this.state.displayed.map((item,idx) => {
-                        return (
+                        if (idx < 11){
+                            return (
+                            <div 
+                                key={`s-${item.id}`}
+                                id={`s-${item.id}`}
+                                data-aos-delay={idx*100}
+                                data-aos='zoom-in'
+                                data-aos-once={true}
+                                onClick={this.handelClick} 
+                                onMouseEnter={this.handelMouseEnter} 
+                                onMouseLeave={this.handelMouseLeave} 
+                                className={item.id.toString() === this.state.selected ?'song-item-selected':'song-item'}>
+                                <p id={`s-${item.id}`} className='song-item-artist'>{item.artist}</p>
+                                <Divider id={`s-${item.id}`} style={{marginTop:'0px', marginBottom:'10px'}}/>
+                                <p id={`s-${item.id}`} className='song-item-title'>{item.name}</p>
+                            </div>
+                        )
+                        }
+                        else{
+                            return (
                             <div 
                                 key={`s-${item.id}`}
                                 id={`s-${item.id}`}
@@ -70,6 +89,8 @@ export default class SongSelector extends Component {
                                 <p id={`s-${item.id}`} className='song-item-title'>{item.name}</p>
                             </div>
                         )
+                        }
+                        
                     })}
                 </div>
                 

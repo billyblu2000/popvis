@@ -45,7 +45,7 @@ export default class SongView extends Component {
                         {this.state.song.phrases.sort((a, b)=>{
                             return a.id - b.id
                         }).map((item)=>{
-                            return <PhraseItem item={item} displayed={this.state.display === item.id.toString()} length={item.length} label={item.label} id={item.id} changeDisplay={idx => {return this.changeDisplay(idx)}}></PhraseItem>
+                            return <PhraseItem songId= {this.state.song.id} item={item} displayed={this.state.display === item.id.toString()} length={item.length} label={item.label} id={item.id} changeDisplay={idx => {return this.changeDisplay(idx)}}></PhraseItem>
                         })}
                         </div>
                     </div>

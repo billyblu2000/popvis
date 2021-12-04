@@ -29,14 +29,14 @@ export default class ModeSelector extends React.Component {
     render(){
         return (
             <div className='mode-selector-root'>
-                <div style={{cursor:'pointer'}}  onClick={this.handelClick}>
+                <div style={{cursor:'pointer'}}  onClick={this.handelClick} data-aos='flip-up' data-aos-delay={1400} data-aos-once={true}>
                     {this.state.major ? 
                         <div className='mode-selection mode-selection-left-radius major' id='mode-select-major'>Major</div>
                         :
                         <div className='mode-selection mode-selection-left-radius mode-not-selected' id='mode-select-major'>Major</div>
                     }
                 </div>
-                <div style={{cursor:'pointer'}} onClick={this.handelClick}>
+                <div style={{cursor:'pointer'}} onClick={this.handelClick} data-aos='flip-up' data-aos-delay={1500} data-aos-once={true}>
                     {this.state.minor ? 
                         <div className='mode-selection mode-selection-right-radius minor' id='mode-select-minor'>Minor</div>
                         :
