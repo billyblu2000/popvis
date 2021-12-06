@@ -63,6 +63,7 @@ export default class PitchRangeView extends Component {
                 .selectAll("rect")
                 .data(bins)
                 .join("rect")
+                .attr('class', 'pitch-range-view-single-rect')
                 .attr("data-aos", 'zoom-in-up')
                 .attr("data-aos-delay", d => d.x0*50)
                 .attr("x", d => xScale(d.x0) + 0.5)
@@ -72,7 +73,7 @@ export default class PitchRangeView extends Component {
                 .on("mouseover",function(e,d){
                     console.log(d)
                     d3.select(this).attr("fill", 'orange')
-                    d3.select('#pitch-range-tooltip').attr('opacity', '1').text(`[${d.x0},${d.x1}): ${d3.sum(d, i => Y[i])}`);
+                    d3.select('#pitch-range-tooltip').attr('opacity', '1').text(`[${d.x0},${d.x1}): ${d3.sum(d, i => Y[i])} Phrases`);
                 })
                 .on("mouseout",function(e,d){
                     d3.select(this).attr("fill", themeColor[5])
@@ -94,6 +95,25 @@ export default class PitchRangeView extends Component {
             return {data:props.data, highlight:props.highlight}
         }
         if (props.highlight !== state.highlight){
+            var rects = d3.selectAll('.pitch-range-view-single-rect')
+            console.log(rects)
+            var song = props.data.filter((item) => item.id.toString() === props.highlight)
+            if  (song === undefined || song.length !== 1){
+                rects.attr('fill', d => themeColor[5])
+                return {data:props.data, highlight: props.highlight}
+            }
+            var allRanges = {}
+            for (let i in song[0].phrases){
+                allRanges[song[0].phrases[i].pitch_range] = song[0].phrases[i].pitch_range
+            }
+            rects.attr('fill', d => {
+                if (d.x0 in allRanges){
+                    return 'orange'
+                }
+                else{
+                    return themeColor[5]
+                }
+            })
             return {data:props.data, highlight:props.highlight}
         }
         return {data:props.data, highlight:props.highlight}
@@ -103,7 +123,7 @@ export default class PitchRangeView extends Component {
         return (
             <div id='pitch-range-svg-parent-div'>
                 <svg id='pitch-range-svg' width='100%' height='100%' viewBox='0 0 535 197' preserveAspectRatio="none">
-                <text id='pitch-range-tooltip' x='450' y='20' opacity='0'></text>
+                <text id='pitch-range-tooltip' x='390' y='20' opacity='0'></text>
                 </svg>
             </div>
         )

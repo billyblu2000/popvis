@@ -75,28 +75,41 @@ export default class KeyModeView extends Component {
                     });
                 return {data:props.data,highlight:props.highlight}
             }
-            var map = song[0].phrases[0].mode === 'maj'? majorTonicsMap : minorTonicsMap
-            var index = map[song[0].phrases[0].tonic]
-            if (song[0].phrases[0].mode === 'maj'){
-                d3.selectAll('.key-note-view-major-path')
-                    .attr("fill", (d,i) => {
-                        return i === index ? 'orange': d3.interpolateBlues(colorMap(state.statsMajor[i]));
-                    });
-                d3.selectAll('.key-note-view-minor-path')
-                    .attr("fill", (d,i) => {
-                        return d3.interpolateBlues(colorMap(state.statsMinor[i]));
-                    });
+            if (song[0].phrases[0] !== undefined){
+                var map = song[0].phrases[0].mode === 'maj'? majorTonicsMap : minorTonicsMap
+                var index = map[song[0].phrases[0].tonic]
+                if (song[0].phrases[0].mode === 'maj'){
+                    d3.selectAll('.key-note-view-major-path')
+                        .attr("fill", (d,i) => {
+                            return i === index ? 'orange': d3.interpolateBlues(colorMap(state.statsMajor[i]));
+                        });
+                    d3.selectAll('.key-note-view-minor-path')
+                        .attr("fill", (d,i) => {
+                            return d3.interpolateBlues(colorMap(state.statsMinor[i]));
+                        });
+                }
+                else{
+                    d3.selectAll('.key-note-view-major-path')
+                        .attr("fill", (d,i) => {
+                            return d3.interpolateBlues(colorMap(state.statsMajor[i]));
+                        });
+                    d3.selectAll('.key-note-view-minor-path')
+                        .attr("fill", (d,i) => {
+                            return d3.interpolateBlues(colorMap(state.statsMinor[i]));
+                        });
+                }
             }
             else{
                 d3.selectAll('.key-note-view-major-path')
-                    .attr("fill", (d,i) => {
-                        return d3.interpolateBlues(colorMap(state.statsMajor[i]));
-                    });
+                        .attr("fill", (d,i) => {
+                            return d3.interpolateBlues(colorMap(state.statsMajor[i]));
+                        });
                 d3.selectAll('.key-note-view-minor-path')
-                    .attr("fill", (d,i) => {
-                        return i === index ? 'orange': d3.interpolateBlues(colorMap(state.statsMinor[i]));
-                    });
+                        .attr("fill", (d,i) => {
+                            return d3.interpolateBlues(colorMap(state.statsMinor[i]));
+                        });
             }
+            
         }
         return {highlight:props.highlight}
     }

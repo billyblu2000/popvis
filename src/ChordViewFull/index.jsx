@@ -3,37 +3,43 @@ import * as d3 from 'd3'
 
 import './index.css'
 
-const width = 632;
-const height = 464;
+// var testData = {
+//     name:'I',
+//     value:'305',
+//     children:[
+//         {
+//             name:'V',
+//             value:'100',
+//             children:[{name:'ii',value:'100'}]
+//         },
+//         {
+//             name:'VII',
+//             value:'205',
+//         },
+//         {
+//             name:'IV',
+//             value:'205',
+//         },
+//         {
+//             name:'V',
+//             value:'205',
+//         }
+//     ]
+// }
+
+const width = 1200;
+const height = 800;
 var nodeId = 0;
 
-export default class ChordView extends Component {
+export default class ChordViewFull extends Component {
 
     state = {
         data:this.props.data,
         full:this.props.full
     }
 
-    zoomed = ({transform}) => {
-        this.svg.attr("transform", transform);
-    }
-
     shouldComponentUpdate(nextProps, nextState){
-        if (nextProps.data !== this.state.data || nextProps.full !== this.state.full){
-            remove(['node-group', 'link-group']);
-            const zoom = d3.zoom().scaleExtent([0.1, 40]).on("zoom", this.zoomed);
-            this.svg = d3.select('#chord-svg').append('g');
-            this.svg.call(zoom)
-            this.nodeGroup = this.svg.append('g').attr('id', 'node-group')
-            this.linkGroup = this.svg.append('g').attr('id', 'link-group')
-            var converted = processData(nextProps.data)
-            this.root = d3.hierarchy(converted);
-            this.node = undefined;
-            this.link = undefined;
-            this.sizeScale = d3.scaleSqrt().domain([0,converted.sum]).range([5,30]);
-            this.colorScale = d3.scalePow().exponent(0.2).domain([0,converted.sum]).range([0,0.7]);
-            this.update(true)
-        }
+        
         return true
     }
 
@@ -87,7 +93,6 @@ export default class ChordView extends Component {
         const colorScale = this.colorScale;
         this.link = this.linkGroup.selectAll('.link')
                         .data(links, function(d){ return d.target.id })
-        
         this.link.exit().remove()
         const linkEnter = this.link.enter()
                                     .append('line')
@@ -124,7 +129,7 @@ export default class ChordView extends Component {
                     .attr("r", function(d) { return sizeScale(d.data.value) })
                     .on("mouseover",function(e,d){
                         d3.select(this).style('fill','orange')
-                        d3.select('#chord-tooltip').attr('opacity', '1').text(`${d.data.name}: ${d.data.value}`)
+                        d3.select('#chord-full-tooltip').attr('opacity', '1').text(`${d.data.name}: ${d.data.value}`)
                     })
                     .on("mouseout",function(e,d){
                         d3.select(this).style('fill', function(d) { 
@@ -132,10 +137,10 @@ export default class ChordView extends Component {
                                 return 'red'
                             }
                             else{
-                                return d3.interpolateBlues(colorScale(d.data.value)) 
+                                return d3.interpolateBlues(colorScale(d.data.value))
                             }
                         })
-                        d3.select('#chord-tooltip').attr('opacity', '0')
+                        d3.select('#chord-full-tooltip').attr('opacity', '0')
                     })
                     
                     .text(function(d){ return d.data.name })
@@ -144,8 +149,8 @@ export default class ChordView extends Component {
                 .style('font-size', '12px')
                 .style('font-weight', '10px')
                 .attr('fill', 'black')
-                .style('user-select', 'none')
                 .attr('stroke-width', '0.5')
+                .style('user-select', 'none')
                 .text(function(d) { 
                     if (sizeScale(d.data.value) > 10){
                         return d.data.name; 
@@ -194,15 +199,32 @@ export default class ChordView extends Component {
         return nodes
     }
 
+    zoomed = ({transform}) => {
+        this.svg.attr("transform", transform);
+    }
+
     componentDidMount(){
+        remove(['node-group-full', 'link-group-full']);
+        const zoom = d3.zoom().scaleExtent([0.1, 40]).on("zoom", this.zoomed);
+        this.svg = d3.select('#chord-full-svg').append('g');
+        this.svg.call(zoom)
+        this.nodeGroup = this.svg.append('g').attr('id', 'node-group-full')
+        this.linkGroup = this.svg.append('g').attr('id', 'link-group-full')
+        var converted = processData(this.props.data)
+        this.root = d3.hierarchy(converted);
+        this.node = undefined;
+        this.link = undefined;
+        this.sizeScale = d3.scaleSqrt().domain([0,converted.sum]).range([5,30]);
+        this.colorScale = d3.scalePow().exponent(0.2).domain([0,converted.sum]).range([0,0.7]);
+        this.update(true)
     }
 
     render() {
         return (
-            <div id='chord-svg-parent-div'>
-                <svg id='chord-svg' width='100%' height='100%' viewBox='0 0 632 432' preserveAspectRatio="none">
-                    <text id='chord-tooltip' x='550' y='30' opacity='0'></text>
-                </svg>
+            <div id='chord-full-svg-parent-div'>
+                <svg id='chord-full-svg' width='100%' height='100%' viewBox='0 0 1200 770' preserveAspectRatio="none">
+                    <text id='chord-full-tooltip' x='600' y='30' opacity='0'></text>
+                    </svg>
             </div>
         )
     }
@@ -258,8 +280,8 @@ function processData(data){
                 }
             }
         }
-        stats.sum = d3.max(stats.children, d => d.value)
         stats.value = 1
+        stats.sum = d3.max(stats.children, d => d.value)
         return stats
     }
 }

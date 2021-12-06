@@ -1,4 +1,5 @@
 .App{
-    margin: 10px;
+    margin: auto;
+    max-width: 1360px;
     font-family: zillaslab,palatino,"Palatino Linotype",serif;
 }

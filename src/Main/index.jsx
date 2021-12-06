@@ -1,6 +1,6 @@
 import React from 'react';
 import { Divider, Spin, Badge, Tooltip, notification, Button } from 'antd';
-import { LoadingOutlined, QuestionCircleOutlined, BulbOutlined } from '@ant-design/icons';
+import { LoadingOutlined, QuestionCircleOutlined, BulbOutlined, FullscreenOutlined } from '@ant-design/icons';
 import PubSub from 'pubsub-js';
 import * as d3 from 'd3';
 import AOS from 'aos';
@@ -15,8 +15,9 @@ import MeterView from '../MeterView';
 import ChordDurationView from '../ChordDurationView';
 import PitchRangeView from '../PitchRangeView';
 import ChordView from '../ChordView';
+import ChordViewFull from '../ChordViewFull';
 import Logo from '../Logo';
-import { themeColor, server } from '../utils';
+import { themeColor, server, fullScreen, noteText } from '../utils';
 import './index.css';
 import 'aos/dist/aos.css';
 
@@ -34,6 +35,7 @@ export default class Main extends React.Component {
         modeFilter:[true,true],
         highlight:'-1',
         songSelect:'-1',
+        fullscreen:false,
     }
     parseDate = d3.timeParse('%Y-%m-%d');
 
@@ -49,22 +51,28 @@ export default class Main extends React.Component {
         this.phraseFilterChangeSub = PubSub.subscribe('phraseFilterChange', this.onPhraseFilterChange);
         this.modeFilterChangeSub = PubSub.subscribe('modeFilterChange', this.onModeFilterChange);
         this.songSelectChangeSub = PubSub.subscribe('songSelectChange', this.onSongSelectChange);
+        this.fullSub = PubSub.subscribe('full', this.exitfull);
         this.showWelcome();
     }
-
+    enterFullscreen = () => {
+        fullScreen();
+        this.setState({fullscreen:true})
+    }
+    exitfull = () => {
+        this.setState({fullscreen:false})
+    }
     showWelcome(){
         notification.open({
             key:'welcome',
             message: 'Welcome to POPVIS!',
-            description:
-              'POPVIS is a visualzation of the POP909 Dataset created by Music-X-Lab, NYU Shanghai. If you are confused about the design logic, you may find it helpful by clicking the view title or the card ribbon. For some views, you may click the button next to the view title to enter the fullscreen mode.',
+            description: noteText.welcome,
             duration:10,
             icon: <BulbOutlined style={{color:'green'}}/>
           });
     }
-    showHelp(des){
+    showHelp(title, des){
         notification.open({
-            message: 'User Guid',
+            message: 'User Guid: ' + title,
             description:des,
             duration:0,
             btn:closebtn,
@@ -74,31 +82,31 @@ export default class Main extends React.Component {
         });
     }
     showSelectorHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Selector Card', noteText.selector)
     }
     showStatisticsHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Statistics Card', noteText.statistics)
     }
     showSongHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Song Card', noteText.song)
     }
     showChordProgressionHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Chord Progression View', noteText.chord)
     }
     showMelodyHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Melody Pieces View', noteText.melody)
     }
     showKeyModeHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Key-Mode View', noteText.keyMode)
     }
     showPitchRangeHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Pitch Range View', noteText.pitchRange)
     }
     showChordDurationHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Chord Duration View', noteText.chordDuration)
     }
     showMeterHelp = () => {
-        this.showHelp('1111')
+        this.showHelp('Meter View', noteText.meter)
     }
 
     onYearFilterChange = (name, msg) => {
@@ -161,6 +169,8 @@ export default class Main extends React.Component {
     render(){
         return (
             <div className='main'>
+            {!this.state.fullscreen? 
+            <>
                 <div className='header'>
                     <div style={{float:'left', minWidth:'2%',minHeight:'100%', backgroundColor:themeColor[10]}}></div>
                     <div style={{float:'left', minWidth:'40%'}}>
@@ -176,7 +186,7 @@ export default class Main extends React.Component {
                     <div style={{float:'right', marginLeft:'20px', minWidth:'50%',minHeight:'100%', backgroundColor:themeColor[10]}}></div>
                 </div>
                 <div data-aos-once={true} data-aos='flip-down' data-aos-delay={400}>
-                <Badge.Ribbon text={<div onClick={this.showSelectorHelp} className='card-title'><Tooltip title = 'Click to show help' color='blue'>Selector</Tooltip></div>}>
+                <Badge.Ribbon text={<div onClick={this.showSelectorHelp} className='card-title'><Tooltip title = 'Click to show help' color='green'>Selector</Tooltip></div>} color='green'>
                     <div className='year-brusher card' >
                     {this.state.data.length === 0 ? loading1:
                         <div id='year-brusher-box'>
@@ -198,7 +208,7 @@ export default class Main extends React.Component {
                     </Badge.Ribbon>
                 </div>
                 <div data-aos-once={true} data-aos='flip-right' data-aos-delay={600}>
-                <Badge.Ribbon text={<div onClick={this.showStatisticsHelp} className='card-title'><Tooltip title = 'Click to show help' color='green'>Statistics</Tooltip></div>} color='green'>
+                <Badge.Ribbon text={<div onClick={this.showStatisticsHelp} className='card-title'><Tooltip title = 'Click to show help' color='blue'>Statistics</Tooltip></div>} >
                     <div className='main-display card' >
                     {this.state.data.length === 0 ? loading2:
                         <>
@@ -208,8 +218,8 @@ export default class Main extends React.Component {
                             <div className='song-selector-right'>
                                 <div className='main-display-major'>
                                     <div className='chord-view view' data-aos='flip-down' data-aos-delay={700} data-aos-once={true}>
-                                        <div className='view-title' onClick={this.showChordProgressionHelp}><Tooltip title = 'Click to show help' color='blue'>Chord Progressions: Click to explore</Tooltip></div>
-                                        <ChordView data={this.state.dataFiltered}/>
+                                        <div className='view-title'><Tooltip title = 'Click to show help' color='blue' onClick={this.showChordProgressionHelp}>Chord Progressions: Click to explore</Tooltip> <Tooltip title='Click to enter fullscreen mode' color='blue'><FullscreenOutlined style={{marginLeft:'10px'}} onClick={this.enterFullscreen}/></Tooltip></div>
+                                        <ChordView data={this.state.dataFiltered} full={false}/>
                                     </div>
                                     <div className='melody-view view' data-aos='flip-right' data-aos-delay={800} data-aos-once={true}>
                                         <div className='view-title' onClick={this.showMelodyHelp}><Tooltip title = 'Click to show help' color='blue'>Melody Pieces: Hover to highlight</Tooltip></div>
@@ -255,6 +265,11 @@ export default class Main extends React.Component {
                 <div className='footer' >POP-909 Dataset: Wang, Ziyu, et al. "Pop909: A pop-song dataset for music arrangement generation." arXiv preprint arXiv:2008.07142 (2020).</div>
                 <div className='footer' style={{paddingBottom:'30x',}}>POP909 Dataset Phrase Analysis: Dai, Shuqi, et al "Automatic Analysis and Influence of Hierarchical Structure on Melody, Rhythm and Harmony in Popular Music." arXiv preprint arXiv:2010.07518 (2020).</div>
                 <div className='footer'><span style={{float:'left', paddingTop:'10px', paddingBottom:'100px'}}>NYU Shanghai ｜ Information Visualization Final Project</span> <span style={{float:'right', paddingTop:'10px', paddingBottom:'100px'}}> Copyright @ Billy Yi | 易立</span></div>
+            </>:
+            <>
+                <ChordViewFull data={this.state.dataFiltered} full={true}/> 
+            </>
+                }
             </div>
         )
     }

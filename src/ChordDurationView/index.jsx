@@ -106,7 +106,6 @@ export default class ChordDurationView extends Component {
         if (props.highlight !== state.highlight){
             var paths = d3.selectAll('.chord-duration-paths')
             var song = props.data.filter((item) => item.id.toString() === props.highlight)
-            console.log(song, song[0])
             if  (song === undefined || song.length !== 1){
                 paths.attr("fill", d =>  {
                     if (d.data[0] === 'other'){
