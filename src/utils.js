@@ -2,7 +2,7 @@ import { message } from "antd";
 import axios from "axios";
 import PubSub from "pubsub-js";
 
-var env = 'prod'
+var env = 'staging'
 
 export const themeColor = [
     '#e6f7ff',

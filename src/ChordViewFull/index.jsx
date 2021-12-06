@@ -220,9 +220,10 @@ export default class ChordViewFull extends Component {
     }
 
     render() {
+        console.log(document.body.clientWidth, document.body.clientHeight)
         return (
             <div id='chord-full-svg-parent-div'>
-                <svg id='chord-full-svg' width='100%' height='100%' viewBox='0 0 1200 770' preserveAspectRatio="none">
+                <svg id='chord-full-svg' width='100%' height='100%' viewBox={`0 0 1200 800`} preserveAspectRatio="none">
                     <text id='chord-full-tooltip' x='600' y='30' opacity='0'></text>
                     </svg>
             </div>

@@ -168,7 +168,7 @@ export default class Main extends React.Component {
 
     render(){
         return (
-            <div className='main'>
+            <div style={!this.state.fullscreen? {marginLeft:'4%', marginRight:'4%'}:{margin:'0px'}}>
             {!this.state.fullscreen? 
             <>
                 <div className='header'>
