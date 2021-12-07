@@ -95,7 +95,7 @@ export default class KeyModeView extends Component {
                         });
                     d3.selectAll('.key-note-view-minor-path')
                         .attr("fill", (d,i) => {
-                            return d3.interpolateBlues(colorMap(state.statsMinor[i]));
+                            return i === index ? 'orange': d3.interpolateBlues(colorMap(state.statsMinor[i]));
                         });
                 }
             }

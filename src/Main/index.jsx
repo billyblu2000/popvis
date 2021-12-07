@@ -72,7 +72,7 @@ export default class Main extends React.Component {
     }
     showHelp(title, des){
         notification.open({
-            message: 'User Guid: ' + title,
+            message: 'User Guide: ' + title,
             description:des,
             duration:0,
             btn:closebtn,
@@ -255,7 +255,7 @@ export default class Main extends React.Component {
                     </Badge.Ribbon>
                 </div>
                 <div data-aos='flip-up' data-aos-once={true} data-aos-offset={300}>
-                    <Badge.Ribbon text={<div onClick={this.showSongHelp} className='card-title'><Tooltip title = 'Click to show help' color='gold'>Statistics</Tooltip></div>} color='gold'>
+                    <Badge.Ribbon text={<div onClick={this.showSongHelp} className='card-title'><Tooltip title = 'Click to show help' color='gold'>Song Viewer</Tooltip></div>} color='gold'>
                     <div className='song-display card'>
                     {this.state.data.length === 0 ? loading3:<SongView data={this.state.data} song={this.state.songSelect}/>
                     }
